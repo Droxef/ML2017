@@ -6,6 +6,8 @@ Split the dataset based on the given ratio.
 
 
 import numpy as np
+from utils_functions import ridge_regression
+from costs import compute_mse
 
 
 def split_data(x, y, ratio, seed=1):
@@ -29,8 +31,8 @@ def build_k_indices(y, k_fold, seed):
                  for k in range(k_fold)]
     return np.array(k_indices)
 
-def cross_validation(y, x, k_indices, k, lambda_, degree):
-    """return the loss of ridge regression."""
+def cross_validation(y, x, k_indices, k, lambda_):
+    """train the model over the kth batch and test it on the rest of the given dataset."""
     test_ind=k_indices[k]
     train_ind=k_indices[[i for i in range(k_indices.shape[0]) if i!=k]]
     train_ind=train_ind.reshape(-1)
@@ -39,9 +41,6 @@ def cross_validation(y, x, k_indices, k, lambda_, degree):
     y_test=y[test_ind]
     x_train=x[train_ind,:]
     x_test=x[test_ind,:]
-
-    #tx_train=build_poly(x_train,degree)
-    #tx_test=build_poly(x_test,degree)
 
     w,loss_tr=ridge_regression(y_train,x_train,lambda_)
 

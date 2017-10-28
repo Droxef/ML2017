@@ -4,12 +4,11 @@
 import numpy as np
 
 
-def build_poly(x, degree):
-    """polynomial basis functions for input data x, for j=0 up to j=degree."""
-    Xmat=np.ones(x.shape)
-    for i in range(1,degree+1):
-        Xmat=np.hstack([Xmat,np.power(x,i)])
-    return Xmat
+def build_poly(tx,degree):
+    poly = np.ones((len(tx), 1))
+    for deg in range(1, degree+1):
+        poly = np.c_[poly, np.power(tx, deg)]
+    return poly
 
 def build_cross_poly(tx):
     """add cross influence of second order. Higher order will be estimated as null"""

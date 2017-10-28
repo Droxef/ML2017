@@ -7,14 +7,16 @@ main program that train a model over a dataset and create a submission csv for k
 import numpy as np
 import matplotlib.pyplot as plt
 from proj1_helpers import *
+from helpers import *
+from utils_functions import *
+from split_data import *
 
 if __name__=="__main__":
     max_iters=500
-    cross=false
     lambda_=0
     degree=1
     seed=1
-    k_fold=4
+    k_fold=8
     # Load the data
     testY,testX,idTest=load_csv_data("../../dataset/test.csv", sub_sample=False)
     trainY,trainX,idTrain=load_csv_data("../../dataset/train.csv", sub_sample=False)
@@ -25,12 +27,11 @@ if __name__=="__main__":
     testX=transform_data(testX)
     trainX=transform_data(trainX)
     #standardize
-    testX,_,_=standardize(testX)
-    trainX,_,_=standardize(trainX)
+    testX=standardize(testX)
+    trainX=standardize(trainX)
     #reject outliers
     testX=reject_outliers(testX)
     trainX=reject_outliers(trainX)
-    
     
     ### check best degree with cross val
     degrees=range(1,15)

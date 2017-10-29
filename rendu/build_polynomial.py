@@ -5,6 +5,9 @@ import numpy as np
 
 
 def build_poly(tx,degree):
+    """
+        polynomial basis function up to degree
+    """
     poly = np.ones((len(tx), 1))
     for deg in range(1, degree+1):
         poly = np.c_[poly, np.power(tx, deg)]
@@ -24,3 +27,6 @@ def build_poly_full(tx,degree,cross=False):
     if cross:
         Xmat=np.c_[Xmat, build_cross_poly(tx)[:,1:]]
     return Xmat
+
+if __name__=="__main__":
+    pass

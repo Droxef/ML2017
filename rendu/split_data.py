@@ -47,3 +47,36 @@ def cross_validation(y, x, k_indices, k, lambda_):
     loss_te=compute_mse(y_test,x_test,w)
     return loss_tr, loss_te
 
+def reg_log_cross_validation(y, tx, k_indices, k, lambda_,gamma):
+    """train the model over the kth batch and test it on the rest of the given dataset."""
+    test_ind=k_indices[k]
+    train_ind=k_indices[[i for i in range(k_indices.shape[0]) if i!=k]]
+    train_ind=train_ind.reshape(-1)
+    
+    y_train=y[train_ind]
+    y_test=y[test_ind]
+    tx_train=tx[train_ind,:]
+    tx_test=tx[test_ind,:]
+
+    w,loss_tr=reg_logistic_regression(y_train,tx_train,lambda_,np.zeros(tx.shape[1]),100,gamma)
+    loss_te=compute_sig_loss2(y_test,tx_test,w)+lambda_/2*np.linalg.norm(w)
+    return loss_tr, loss_te
+
+def cross_validation_SGD(y, x, k_indices, k, gamma):
+    """return the loss of ridge regression."""
+    test_ind=k_indices[k]
+    train_ind=k_indices[[i for i in range(k_indices.shape[0]) if i!=k]]
+    train_ind=train_ind.reshape(-1)
+    
+    y_train=y[train_ind]
+    y_test=y[test_ind]
+    x_train=x[train_ind,:]
+    x_test=x[test_ind,:]
+
+    #tx_train=build_poly(x_train,degree)
+    #tx_test=build_poly(x_test,degree)
+
+    w,loss_tr=least_squares_SGD(y_train,x_train,np.zeros((x_train.shape[1],)),500,gamma)
+
+    loss_te=compute_mse(y_test,x_test,w)
+    return loss_tr, loss_te

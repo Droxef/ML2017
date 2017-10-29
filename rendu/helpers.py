@@ -10,13 +10,13 @@ def standardize(x):
     x = x / std_x
     return x
 
-def clean_data(x, col=None):
+def clean_data(x, badval=-999, col=None):
     """ Remove -999 values and replace by mean of feature.
         May remove col features.
     """
     if col is not None:
         x=np.delete(x,col,1)
-    x[x==-999]=np.nan
+    x[x==badval]=np.nan
     meanX=np.nanmean(x,axis=0)
     indsX = np.where(np.isnan(x))
     x[indsX]=np.take(meanX,indsX[1])
